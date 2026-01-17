@@ -21,12 +21,40 @@ public class ExampleTests : IClassFixture<PlaywrightFixture>
         Assert.True(inventoryVisible);
     }
     [Fact]
+    public async Task NavigateToInventoryAfterSuccessfulLogin()
+    {
+        await _loginPage.NavigateToAsync("https://www.saucedemo.com/");
+        await _loginPage.LoginAsync("standard_user", "secret_sauce");
+        await Assertions.Expect(_page).ToHaveURLAsync("https://www.saucedemo.com/inventory.html");
+        var inventoryContainer = _page.Locator(".inventory_container");
+        await Assertions.Expect(inventoryContainer).ToBeVisibleAsync();
+    }
+    [Fact]
+    public async Task LogoutAfterSuccessfulLogin()
+    {
+        await _loginPage.NavigateToAsync("https://www.saucedemo.com/");
+        await _loginPage.LoginAsync("standard_user", "secret_sauce");
+        await _page.ClickAsync("#react-burger-menu-btn");
+        await _page.ClickAsync("#logout_sidebar_link");
+        await Assertions.Expect(_page).ToHaveURLAsync("https://www.saucedemo.com/");
+        var loginButton = _page.Locator("[data-test='login-button']");
+        await Assertions.Expect(loginButton).ToBeVisibleAsync();
+    }
+    [Fact]
     public async Task FailedLogin_InvalidCredentials()
     {
         await _loginPage.NavigateToAsync("https://www.saucedemo.com/");
         await _loginPage.LoginAsync("invalid_user", "wrong_password");
         var errorMessage = await _page.TextContentAsync("[data-test='error']");
         Assert.Equal("Epic sadface: Username and password do not match any user in this service", errorMessage);
+    }
+    [Fact]
+    public async Task FailedLogin_EmptyCredentials()
+    {
+        await _loginPage.NavigateToAsync("https://www.saucedemo.com/");
+        await _page.ClickAsync("[data-test='login-button']");
+        var errorMessage = await _page.TextContentAsync("[data-test='error']");
+        Assert.Equal("Epic sadface: Username is required", errorMessage);
     }
     [Fact]
     public async Task FailedLogin_LockedUser()
