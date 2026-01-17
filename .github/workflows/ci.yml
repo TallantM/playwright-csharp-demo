@@ -1,23 +1,31 @@
 name: CI
+
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v4
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0.x'
+
     - name: Restore dependencies
       run: dotnet restore src/PlaywrightDemo.csproj
-    - name: Install Playwright Browsers
-      run: pwsh -File src/bin/Debug/net8.0/playwright.ps1 install --with-deps
+
     - name: Build
-      run: dotnet build src/PlaywrightDemo.csproj --no-restore
+      run: dotnet build src/PlaywrightDemo.csproj --no-restore --configuration Debug
+
+    - name: Install Playwright Browsers
+      run: pwsh src/bin/Debug/net8.0/playwright.ps1 install --with-deps
+
     - name: Test
-      run: dotnet test src/PlaywrightDemo.csproj --no-build --verbosity normal
+      run: dotnet test src/PlaywrightDemo.csproj --no-build --configuration Debug --verbosity normal
