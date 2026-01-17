@@ -18,14 +18,28 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
+    - name: Cache NuGet Packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: ${{ runner.os }}-nuget-
+
     - name: Restore dependencies
       run: dotnet restore src/PlaywrightDemo.csproj
 
     - name: Build
-      run: dotnet build src/PlaywrightDemo.csproj --no-restore --configuration Release
+      run: dotnet build src/PlaywrightDemo.csproj --no-restore
+
+    - name: Cache Playwright Browsers
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/ms-playwright
+        key: ${{ runner.os }}-playwright-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: ${{ runner.os }}-playwright-
 
     - name: Install Playwright Browsers
-      run: pwsh src/bin/Release/net8.0/playwright.ps1 install --with-deps
+      run: pwsh src/bin/Debug/net8.0/playwright.ps1 install --with-deps
 
     - name: Test
       run: dotnet test src/PlaywrightDemo.csproj --no-build --verbosity normal
