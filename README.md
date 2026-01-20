@@ -27,6 +27,7 @@ For Docker setup (if not installed):
 - Ensure the Docker daemon is running: `docker info`
 
 ## Folder Structure
+```text
 playwright-csharp-demo/
 ├── .github/
 │   └── workflows/
@@ -44,6 +45,7 @@ playwright-csharp-demo/
 ├── Dockerfile                # Containerized build for testing
 ├── README.md                 # This documentation
 └── PlaywrightDemo.sln        # Solution file
+```
 
 ## Testing Overview
 This repository demonstrates layered testing to highlight automated testing skills:
@@ -53,13 +55,17 @@ This repository demonstrates layered testing to highlight automated testing skil
 
 ## Running Tests
 For rapid development, run tests directly on your host (requires host browser installation):
+```bash
 cd src
 playwright install  # Install browsers on host
 dotnet test PlaywrightDemo.csproj
+```
 
 For consistency with CI, use Docker (recommended before pushing):
+```bash
 docker build -t playwright-csharp-demo .
 docker run playwright-csharp-demo
+```
 
 ## CI/CD
 GitHub Actions workflow in `.github/workflows/ci.yml` builds the Docker image and runs tests exclusively in the container on push/pull requests, ensuring environmental consistency across machines.
