@@ -2,15 +2,20 @@ FROM mcr.microsoft.com/playwright/dotnet:v1.57.0-jammy
 
 WORKDIR /app
 
-# Copy csproj and restore dependencies
+# Copy csproj, allureConfig and restore dependencies
 COPY src/*.csproj ./src/
-RUN dotnet restore src/PlaywrightDemo.csproj
+COPY src/allureConfig.json ./src/
+RUN dotnet restore src/csharp_framework_demo.csproj
 
-# Copy source and publish
+# Copy source, build, and publish
 COPY src/ ./src/
-RUN dotnet publish src/PlaywrightDemo.csproj -c Release -o out
+RUN dotnet build src/csharp_framework_demo.csproj -c Release
+RUN dotnet publish src/csharp_framework_demo.csproj -c Release -o out
+
+# Copy allureConfig.json to output directory
+COPY src/allureConfig.json ./out/
 
 # Set the final working directory
 WORKDIR /app/out
 
-ENTRYPOINT ["dotnet", "test", "PlaywrightDemo.dll"]
+CMD ["dotnet", "test", "csharp_framework_demo.dll", "-c", "Release", "--logger", "console;verbosity=detailed"]
