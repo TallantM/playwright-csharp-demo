@@ -1,4 +1,5 @@
-# C# Framework Demo [![CI](https://github.com/TallantM/csharp-framework-demo/actions/workflows/ci.yml/badge.svg)](https://github.com/TallantM/csharp-framework-demo/actions/workflows/ci.yml)
+# C# Framework Demo [![CI](https://github.com/TallantM/csharp-framework-demo/actions/workflows/ci.yml/badge.svg)](https://github.com/TallantM/csharp-framework-demo/actions/workflows/ci.yml) [![Allure Report](https://img.shields.io/badge/Allure-Report-blue)](https://tallantm.github.io/csharp-framework-demo/)
+
 
 A client project demonstration showcasing automated testing in C#/.NET, incorporating tools like Playwright for browser automation, reusable utilities, layered test suites (unit, integration, and end-to-end), and a GitHub Actions CI workflow with Docker containerization for reliable quality assurance.
 
