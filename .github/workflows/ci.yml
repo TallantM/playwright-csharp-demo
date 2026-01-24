@@ -53,8 +53,11 @@ jobs:
     - name: Build Docker Image
       run: docker build -t csharp-framework-demo .
 
-    - name: Test in Docker
-      run: docker run -v ${{ github.workspace }}/allure-results:/app/out/allure-results csharp-framework-demo
+    - name: Test in Docker (with shell access for debugging)
+      run: |
+        docker run --rm csharp-framework-demo ls -la /app/out/
+        docker run --rm csharp-framework-demo cat /app/out/allureConfig.json || echo "Config not found"
+        docker run -v ${{ github.workspace }}/allure-results:/app/out/allure-results csharp-framework-demo
 
     - name: Debug - List extracted files
       if: always()
