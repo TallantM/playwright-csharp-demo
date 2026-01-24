@@ -48,12 +48,10 @@ jobs:
 
     - name: Test in Docker (debug mode)
       run: |
-        mkdir -p allure-results
         docker run --rm \
           -v ${{ github.workspace }}/allure-results:/allure-results \
-          csharp_framework_demo \
-          sh -c "pwd && ls -la && dotnet test --no-build --verbosity detailed && ls -la /allure-results || true"
-
+          csharp_framework_demo
+          
     - name: Debug - Inspect Allure Results Directory
       if: always()
       run: |
