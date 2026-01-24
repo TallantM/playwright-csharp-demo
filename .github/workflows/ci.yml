@@ -46,12 +46,13 @@ jobs:
     - name: Build Docker Image
       run: docker build -t csharp_framework_demo .
 
-    - name: Test in Docker
+    - name: Test in Docker (debug mode)
       run: |
-        mkdir -p allure-results                  # Create on host to avoid root-owned dir
+        mkdir -p allure-results
         docker run --rm \
           -v ${{ github.workspace }}/allure-results:/allure-results \
-          csharp_framework_demo
+          csharp_framework_demo \
+          sh -c "pwd && ls -la && dotnet test --no-build --verbosity detailed && ls -la /allure-results || true"
 
     - name: Debug - Inspect Allure Results Directory
       if: always()
