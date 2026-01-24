@@ -9,7 +9,7 @@ RUN dotnet restore src/csharp_framework_demo.csproj
 
 # Copy source, build, and publish
 COPY src/ ./src/
-RUN dotnet build src/csharp_framework_demo.csproj -c Releas
+RUN dotnet build src/csharp_framework_demo.csproj -c Release
 RUN dotnet publish src/csharp_framework_demo.csproj -c Release -o out
 
 # Set the final working directory
