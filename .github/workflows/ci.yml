@@ -48,15 +48,24 @@ jobs:
 
     - name: Test in Docker
       run: |
-        mkdir -p allure-results  # Ensure directory exists on host
+        mkdir -p allure-results                  # Create on host to avoid root-owned dir
         docker run --rm \
           -v ${{ github.workspace }}/allure-results:/allure-results \
-          -e ALLURE_RESULTS_PATH=/allure-results \
           csharp_framework_demo
+
+    - name: Debug - Inspect Allure Results Directory
+      if: always()
+      run: |
+        echo "Contents of allure-results on host:"
+        ls -la allure-results || true
+        echo "File count:"
+        find allure-results -type f | wc -l || true
 
     - name: Generate Allure Report
       if: always()
       run: allure generate allure-results --clean -o allure-report
+
+    # Artifact uploads remain the same
 
     - name: Upload Allure Report as Artifact
       if: always()
