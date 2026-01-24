@@ -48,8 +48,10 @@ jobs:
 
     - name: Test in Docker
       run: |
+        mkdir -p allure-results  # Ensure directory exists on host
         docker run --rm \
-          -v ${{ github.workspace }}/allure-results:/app/src/bin/Release/net8.0/allure-results \
+          -v ${{ github.workspace }}/allure-results:/allure-results \
+          -e ALLURE_RESULTS_PATH=/allure-results \
           csharp_framework_demo
 
     - name: Generate Allure Report
@@ -64,10 +66,10 @@ jobs:
         path: allure-report
         retention-days: 30
 
-    - name: Upload Allure Results
+    - name: Upload Allure Results (for debugging / re-generation)
       if: always()
       uses: actions/upload-artifact@v4
       with:
         name: allure-results
-        path: allure-results
+        path: allure-results/
         retention-days: 30
